@@ -54,8 +54,6 @@ body {
 .cards-list-wrapper {
   background: #fff;
   border-right: 1px solid #ccc;
-  margin: 0 10px;
-  margin-left: 0;
   display:flex;
   flex-grow: 1;
   flex-wrap: wrap;
@@ -66,7 +64,7 @@ body {
   }
 
   .cards-title {
-    margin: 0px auto;
+    margin: 10px auto;
   }
 
 }
