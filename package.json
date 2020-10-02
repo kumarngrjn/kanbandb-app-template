@@ -5,7 +5,9 @@
   "dependencies": {
     "cra-template": "1.0.3",
     "kanbandb": "github:netpoetica/KanbanDB#master",
+    "node-sass": "^4.14.1",
     "react": "^16.13.1",
+    "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3"
   },
