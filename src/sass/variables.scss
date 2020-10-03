@@ -1,0 +1,21 @@
+
+$primary: #2185d0;
+
+$border-default: 1px solid #ccc;
+
+$border-thicker-width: 2px;
+
+$error-color: #db2828;
+
+$success-color: #21ba45;
+
+$kanban-board-colors: (
+  'todo': #54c8ff,
+  'inprogress': #fbbd08,
+  'done': $success-color
+);
+
+$message: (
+    'success': $success-color,
+    'error': $error-color
+);

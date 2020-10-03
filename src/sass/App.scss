@@ -1,12 +1,11 @@
+@import 'mixins';
+@import 'variables';
+
 body {
   font-size: 14px;
 }
 
 
-
-.App {
-  text-align: center;
-}
 .App-header {
   background-color: #282c34;
   min-height: 10vh;
@@ -15,7 +14,7 @@ body {
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: #fff;
 }
 
 .App-link {
@@ -29,58 +28,20 @@ body {
   width: 1024px;
 }
 
-.add-card-wrapper {
-  display: flex;
-  flex: 0 0 100%;
-  margin-bottom: 20px;
-
-  & > * {
-    margin: 0 10px;
-  }
-
-  .card-status-select {
-    flex-basis: auto;
-  }
-
-  .card-name-input {
-    flex-grow: 4;
-  }
-}
-
 .card-board-wrapper {
-  display: flex;
+  @include flex-default;
+  margin: 15px 0;
 }
 
-.cards-list-wrapper {
-  background: #fff;
-  border-right: 1px solid #ccc;
-  display:flex;
-  flex-grow: 1;
-  flex-wrap: wrap;
-  flex-direction: column;
-
-  &:last-child {
-    border-right: 0;
-  }
-
-  .cards-title {
-    margin: 10px auto;
-  }
-
+.error {
+  background-color: #fff6f6;
+  color: $error-color;
+  padding: 1rem;
+  margin: 0 10px;
 }
 
-
-.card {
-  margin: 10px;
-  padding: 10px;
-  border: 1px solid #eaeaea;
-  border-radius: 5px;
-  box-shadow: 2px 4px #ddd;
-  text-align: left;
-
-  .card-title {
-    text-align: left;
-    padding: 5px 0;
-  }
+.required {
+  color: $error-color;
+  margin-right: 2px;
 }
 

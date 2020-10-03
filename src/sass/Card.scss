@@ -1,0 +1,29 @@
+@import 'mixins';
+@import 'variables';
+
+.card {
+    margin: 10px;
+    padding: 10px;
+    background-color: #fff;
+    @include add-border(all, 1px, solid, #eaeaea, 5px);
+
+    box-shadow: 2px 4px #ddd;
+    text-align: left;
+    position: relative;
+  
+    .card-title {
+      text-align: left;
+      padding: 5px 0;
+    }
+  
+    .delete-card {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      color: $error-color;
+      font-weight: bold;
+      cursor: pointer;
+      background: #fff6f6;
+      padding: 5px;
+    }
+  }

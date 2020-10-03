@@ -1,0 +1,32 @@
+@import 'variables';
+@import 'mixins';
+@use "sass:map";
+
+.cards-list-wrapper {
+    background: rgba(246,246,246,0.5);
+    @include flex-default;
+    flex-direction: column;
+    min-height: 75vh;
+    margin: 0 10px;
+
+    &:last-child {
+        margin-right: 0;
+    }
+
+    .cards-title {
+        margin: 10px auto;
+    }
+
+    &.todo {
+        @include add-border(top, 2px, solid, map-get($kanban-board-colors, "todo"))
+    }
+
+    &.inprogress {
+        @include add-border(top, 2px, solid, map-get($kanban-board-colors, "inprogress"))
+    }
+
+    &.done {
+        @include add-border(top, 2px, solid, map-get($kanban-board-colors, "done"))
+    }
+  
+}

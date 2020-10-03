@@ -3,12 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "classnames": "^2.2.6",
     "cra-template": "1.0.3",
     "kanbandb": "github:netpoetica/KanbanDB#master",
+    "lodash": "^4.17.20",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^16.13.1",
+    "react-modal": "^3.11.2",
     "react-scripts": "3.4.3"
   },
   "scripts": {

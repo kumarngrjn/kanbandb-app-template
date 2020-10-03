@@ -1,0 +1,23 @@
+@mixin add-border(
+    $position: all,
+    $size: 1px,
+    $pattern: solid,
+    $color: #ccc,
+    $radius: 0) {
+
+  @debug "divider offset: #{$position}";
+
+  @if $position == 'all' {
+    border: $size $pattern $color;
+    border-radius: $radius;
+  }
+  @else {
+    border-#{$position}: $size $pattern $color;
+    border-radius: $radius;
+  }
+}
+
+@mixin flex-default {
+    display: flex;
+    flex-basis: 100%;
+}

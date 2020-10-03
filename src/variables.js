@@ -59,8 +59,31 @@ export const cards = [
     },
 ]
 
+export const droppableMap = {
+    droppable1: 'TODO',
+    droppable2: 'DOING',
+    droppable3: 'TODONEDO',
+}
+
 export const cardStatusOptions = [
     {value: 'TODO', label: 'Todo'},
-    {value: 'DOING', label: 'In Progress'},
+    {value: 'DOING', label: 'In Progress',},
     {value: 'DONE', label: 'Done'},
 ]
+
+
+
+export const customStyles = {
+    content : {
+      top                   : '50%',
+      left                  : '50%',
+      right                 : 'auto',
+      bottom                : 'auto',
+      marginRight           : '-50%',
+      transform             : 'translate(-50%, -50%)',
+      width                 : '500px',
+      border                : '1px solid #ccc'
+    }
+  };
+
+

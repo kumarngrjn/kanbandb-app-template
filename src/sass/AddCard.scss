@@ -1,0 +1,19 @@
+.add-card-wrapper {
+    display: flex;
+    flex: 0 0 100%;
+    margin-bottom: 20px;
+  
+    & > * {
+      margin: 0 10px;
+    }
+
+    .card-name-input {
+      flex-grow: 1;
+    }
+  }
+
+.add-card-label {
+    width: 100px;
+    display: flex;
+    align-items: center;
+}

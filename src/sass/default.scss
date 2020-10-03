@@ -1,4 +1,5 @@
-
+@import 'mixins';
+@import 'variables';
 ul {
     margin: 0;
     padding: 0;
@@ -15,6 +16,10 @@ ul {
   input, select {
     height: 2rem;
     line-height: 2rem;
+
+    &.input-error {
+        @include add-border(all, 2px, solid , $error-color);
+    }
   }
 
   button {
@@ -29,3 +34,5 @@ ul {
         background-color: #2185d0;
     }
   }
+
+  
