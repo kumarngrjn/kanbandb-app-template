@@ -9,12 +9,13 @@
     padding: 15px;
     color: #fff;
     cursor: pointer;
+    z-index: 9999;
 
     &.success{
         background-color: map-get($message , 'success');
     }
 
     &.error{
-        background-color: map-get($message , 'success');
+        background-color: map-get($message , 'error');
     }
 }

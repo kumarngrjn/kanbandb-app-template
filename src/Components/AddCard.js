@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 import classnames from 'classnames'
 import '../sass/Modal.scss';
 import '../sass/AddCard.scss';
-Modal.setAppElement('#root')
+//Modal.setAppElement('#root')
 
 function AddCard (props){
     const [status, setStatus] = useState(cardStatusOptions[0].value);

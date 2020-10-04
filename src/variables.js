@@ -1,4 +1,4 @@
-export const cards = [
+export const defaultCards = [
     {
         name: 'Update node modules',
         description: 'Need to update node modules to latest version',
@@ -70,6 +70,18 @@ export const cardStatusOptions = [
     {value: 'DOING', label: 'In Progress',},
     {value: 'DONE', label: 'Done'},
 ]
+
+export const cardStatusObject = {
+    TODO: {droppableId: 'droppable1', class: 'todo', title: 'ToDo'},
+    DOING: {droppableId: 'droppable2', class: 'inprogress', title: 'In Progress'}, 
+    DONE: {droppableId: 'droppable3', class: 'done', title: 'Done'}
+  }
+
+export const reverseCardStatusMapObject = {
+    droppable1: 'TODO',
+    droppable2: 'DOING',
+    droppable3: 'DONE',
+}
 
 
 

@@ -2,37 +2,28 @@ import React, { useEffect, useState } from 'react';
 import './sass/normalize.css';
 import './sass/default.scss';
 import './sass/App.scss'
-import {cards} from './variables'
+import {defaultCards, cardStatusObject,reverseCardStatusMapObject} from './variables'
 import KanbanDB from 'kanbandb/dist/KanbanDB';
 import Cards from './Components/Cards';
 import AddCard from './Components/AddCard';
 import { DragDropContext} from 'react-beautiful-dnd';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, merge } from 'lodash';
 import Message from './Components/Message';
 
 
 function App() {
   // Initialize DB communications.
   const [gotCards, setGotCards] = useState(false);
-  const [todoItems, setTodoItems] = useState([]);
-  const [inProgressItems, setInProgressItems] = useState([]);
-  const [completedItems, setCompletedItems] = useState([]);
+  const [cards, setCards] = useState([]);
   const [showAddTask, setShowAddTask] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const [message, setMessage] = useState({});
 
-  const mapObject = {
-    droppable1 : {key: 'TODO',value: todoItems},
-    droppable2 : {key: 'DOING',value: inProgressItems},
-    droppable3 : {key: 'DONE',value: completedItems},
-  }
 
   const addInitialCards = db  => {
-
-    cards.forEach(async (card) => {
+    defaultCards.forEach(async (card) => {
       try{
-        const cardId = await db.addCard(card);
-        console.log('card added with '+ cardId)
+        await db.addCard(card);
       }
       catch(err){
         console.error(err.message);
@@ -42,88 +33,80 @@ function App() {
   }
 
   const getCards = async () => {
-    const connect = await KanbanDB.connect();
-    await addInitialCards(connect);
-    const cards = await connect.getCards()
+    try {
+      const connect = await KanbanDB.connect();
+      await addInitialCards(connect);
+      const cards = await connect.getCards()
 
-    if(cards.length> 0){
-      cards.sort((a,b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
-      const todoItems = cards.filter(card => card.status === 'TODO')
-      const inProgressItems = cards.filter(card => card.status === 'DOING')
-      const completedItems = cards.filter(card => card.status === 'DONE')
+      if(cards.length> 0){
+        cards.sort((a,b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
+        setCards(cards);
+      }
 
-      setTodoItems(todoItems)
-      setInProgressItems(inProgressItems)
-      setCompletedItems(completedItems)
+      setGotCards(true)
     }
-
-    setGotCards(true)
+    catch(error){
+      setMessage({success: false, name: error.message});
+      setShowMessage(true);
+    }
   }
 
   useEffect(() => {
-    getCards();
+    cards.length === 0 && getCards();
   },[gotCards]);
 
   const addTask = async ({name, status, description}, callback) => {
-      try{
-        await KanbanDB.addCard({name, status, description});
-        setMessage({success: true, name: 'Card added: '+ name});
-        KanbanDB.getCardsByStatusCodes([status])
-          .then (cards => {
-            console.log(cards);
-            cards.sort((a,b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
-            status === 'TODO' && setTodoItems(cards)
-
-            status === 'DOING' && setInProgressItems(cards)
-
-            status === 'DONE' && setCompletedItems(cards)
-
-            setShowAddTask(false);
-
-            callback && callback()
-        })
-        .catch(error => {setMessage({success: false, name: error.message}); setShowMessage(true)});
-      }
-      catch(error){
-        setMessage({success: false, name: error.message});
-      } 
-      console.info('called set show mess')
-      
+    try{
+      const cardId = await KanbanDB.addCard({name, status, description});
+      setMessage({success: true, name: 'Card added: '+ name});
+      const addedCard = await KanbanDB.getCardById(cardId)
+      const updatedCardList = cloneDeep(cards);
+      updatedCardList.push(addedCard);
+      updatedCardList.sort((a,b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
+      console.log(updatedCardList);
+      setCards(updatedCardList);
+      setShowAddTask(false);
+      callback && callback()
       setShowMessage(true);
+    }
+    catch(error){
+      setMessage({success: false, name: error.message});
+      setShowMessage(true);
+    } 
+    console.info('called set show mess')
+    
   }
 
+  const move = async(cardId, sourceDroppableId, destinationDroppableId) => {    
+    const updatedCard = cards.find(card => card.id === cardId);
+    updatedCard.status = reverseCardStatusMapObject[destinationDroppableId];
+    console.log(updatedCard);
+    try {
+      const updateCard  = await KanbanDB.updateCardById(updatedCard.id, updatedCard);
   
-
-  const move = (sourceDroppableId, destinationDroppableId, sourceIndex) => {
-    //let modifiedRemoveList  =  [];
-    let removed = null;
-    
-    const modifiedRemoveList = cloneDeep(mapObject[sourceDroppableId].value);
-    [removed]  = modifiedRemoveList.splice(sourceIndex, 1);
-    removed.status = mapObject[destinationDroppableId].key
-
-    const updateCard  = KanbanDB.updateCardById(removed.id, removed);
-    console.log(updateCard);
-    if(updateCard){
-      KanbanDB.getCards()
-        .then (cards => {
-            console.log(cards);
-            cards.sort((a,b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
-            const todoItems = cards.filter(card => card.status === 'TODO')
-            const inProgressItems = cards.filter(card => card.status === 'DOING')
-            const completedItems = cards.filter(card => card.status === 'DONE')
-
-            setTodoItems(todoItems);
-            setInProgressItems(inProgressItems);
-            setCompletedItems(completedItems);
-        })
-        .catch(error => console.error(error.message));
+      if(updateCard){
+        const newCardsList = await KanbanDB.getCardsByStatusCodes([reverseCardStatusMapObject[sourceDroppableId], reverseCardStatusMapObject[destinationDroppableId]]);
+        if(newCardsList){
+          console.log(newCardsList);
+          newCardsList.sort((a,b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
+          console.log(cards);
+          merge(newCardsList, cards);
+          console.log(newCardsList)
+          setCards(newCardsList);
+        }
+      }
     }
+    catch(error)  {
+      setMessage({success: false,name:error.message}); 
+      setShowMessage(true)
+    };
+    
 
   }
 
   const onDragEnd = result => {
-    const { source, destination } = result;
+    console.log(result);
+    const { draggableId , source, destination} = result;
 
     // dropped outside the list
     if (!destination) {
@@ -135,67 +118,58 @@ function App() {
     } 
     else {   
       console.log("hello");
-        move(
-            source.droppableId,
-            destination.droppableId,
-            source.index,
-            destination.index
-        );
+        move(draggableId, source.droppableId, destination.droppableId);
 
     }
 };
 
-const deleteCard = async (cardId, droppableId) => {
-  const deleteCardResponse = await KanbanDB.deleteCardById(cardId)
-  let cards = [];
-  if(deleteCardResponse){
-  setMessage({success: true, name:'Card successfully deleted'});
-  setShowMessage(true);
-  switch(droppableId){
-    case 'droppable1':
-      cards = await KanbanDB.getCardsByStatusCodes(['TODO']);
-      cards.sort((a,b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
-      setTodoItems(cards);
-      break;
-    
-    case 'droppable2':
-      cards = await KanbanDB.getCardsByStatusCodes(['DOING']);
-      cards.sort((a,b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
-      setInProgressItems(cards);
-      break;
-    
-    case 'droppable3':
-      cards = await KanbanDB.getCardsByStatusCodes(['DONE']);
-      cards.sort((a,b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
-      setCompletedItems(cards);
-
-      break;
+const deleteCard = async (cardId) => {
+  try {
+    const deleteCardResponse = await KanbanDB.deleteCardById(cardId)
+    console.log(deleteCardResponse)
+    if(deleteCardResponse){
+      setMessage({success: true, name:'Card successfully deleted'});
+      setShowMessage(true);
+      const newCardsList = cards.filter(card => card.id !== cardId)
+      setCards(newCardsList);
+    }
   }
+  catch(error){
+    setMessage({success: false, name:error.message});
+    setShowMessage(true);
   }
-
 };
+
+
 
 const resetMessage = () => {
   setMessage({})
   setShowMessage(false)
 }
 
+const renderCards = () => {
+  const renderObject = []
+  for(const key in cardStatusObject){
+    const cardsForCurrentStatus = cards.filter(card => card.status === key);
+    renderObject.push(<Cards data-testid={key} cards={cardsForCurrentStatus} title={cardStatusObject[key].title} droppableId ={cardStatusObject[key].droppableId} className={cardStatusObject[key].class} deleteCard={deleteCard}/>);
+  } 
+  return [...renderObject];
+}
+
   return (
     <div className="App">
       <header className="App-header">
       </header>
-      <div className='content'>
+      {gotCards &&<div className='content'>
         {showMessage && <Message message={message} closeMessage ={resetMessage} />}
         <button className='primary' onClick={()=> setShowAddTask(true)}>Add Task</button>
         {showAddTask && <AddCard showModal={showAddTask} setShowModal ={setShowAddTask} addTask ={addTask} />}
         <div className='card-board-wrapper'>
           <DragDropContext onDragEnd={onDragEnd}>
-            <Cards cards ={todoItems} title={'To-do'}  droppableId = {'droppable1'} deleteCard = {deleteCard} className='todo'/>
-            <Cards cards ={inProgressItems} title={'In progress'} droppableId = {'droppable2'} deleteCard = {deleteCard} className='inprogress'/>
-            <Cards cards ={completedItems} title={'Complete'} droppableId = {'droppable3'} deleteCard = {deleteCard} className='done' />
+            {renderCards()}
           </DragDropContext>
         </div>
-      </div>
+      </div>}
 
     </div>
   );

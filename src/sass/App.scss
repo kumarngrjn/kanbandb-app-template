@@ -33,11 +33,11 @@ body {
   margin: 15px 0;
 }
 
-.error {
+.no-items-message {
   background-color: #fff6f6;
+  @include add-border(all, 2px, solid, $error-color);
   color: $error-color;
   padding: 1rem;
-  margin: 0 10px;
 }
 
 .required {
