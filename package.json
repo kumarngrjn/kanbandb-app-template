@@ -5,7 +5,6 @@
   "dependencies": {
     "classnames": "^2.2.6",
     "cra-template": "1.0.3",
-    "enzyme": "^3.11.0",
     "kanbandb": "github:netpoetica/KanbanDB#master",
     "lodash": "^4.17.20",
     "node-sass": "^4.14.1",
@@ -14,13 +13,12 @@
     "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^16.13.1",
     "react-modal": "^3.11.2",
-    "react-scripts": "3.4.3",
-    "sinon": "^9.1.0"
+    "react-scripts": "3.4.3"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -39,9 +37,10 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/dom": "^7.24.3",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.0.4",
-    "@testing-library/react-hooks": "^3.4.2",
-    "enzyme-adapter-react-16": "^1.15.5"
+    "jest-environment-jsdom-sixteen": "^1.0.3",
+    "sinon": "^9.1.0"
   }
 }

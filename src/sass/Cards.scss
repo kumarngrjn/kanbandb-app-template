@@ -2,6 +2,12 @@
 @import 'mixins';
 @use "sass:map";
 
+
+.card-board-wrapper {
+    @include flex-default;
+    margin: 15px 0;
+}
+
 .cards-list-wrapper {
     background: rgba(246,246,246,0.5);
     @include flex-default;
@@ -13,7 +19,7 @@
         margin-right: 0;
     }
 
-    .cards-title {
+    .section-title {
         margin: 10px auto;
     }
 

@@ -1,14 +1,30 @@
+/**
+ * @file Message - Displays message 
+ */
+
 import React from 'react';
-import classnames from 'classnames'
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import '../sass/Message.scss';
 
-function Message(props){
-    const messagetype = classnames('message',{success: props.message.success}, {error: !props.message.success})
-    return(
-        <div className={messagetype} onClick={props.closeMessage}>
-            <span className='message-text'>{props.message.name}</span>
-        </div>
-    )
+const Message = props => {
+  const {message, closeMessage} = props;
+  const messagetype = classnames('message',{success: message.success}, {error: !message.success})
+
+  setTimeout(()=>{
+    closeMessage()
+  }, 5000);
+  
+  return(
+    <div data-testid={'message-bar'} className={messagetype} onClick={closeMessage}>
+        <span className='message-text'>{message.name}</span>
+    </div>
+  )
+}
+
+Message.propTypes = {
+  message: PropTypes.object,
+  closeMessage: PropTypes.func
 }
 
 export default Message;

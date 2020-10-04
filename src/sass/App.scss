@@ -28,20 +28,30 @@ body {
   width: 1024px;
 }
 
-.card-board-wrapper {
-  @include flex-default;
-  margin: 15px 0;
-}
-
 .no-items-message {
-  background-color: #fff6f6;
-  @include add-border(all, 2px, solid, $error-color);
-  color: $error-color;
+  background-color: #fcfff5;
+  @include add-border(all, 2px, solid, $success-color);
+  color: $success-color;
   padding: 1rem;
 }
 
 .required {
   color: $error-color;
   margin-right: 2px;
+}
+
+#show-add-task-dialog {
+  margin: 0 10px;
+}
+
+.fadein, .fadeout {
+  opacity: 0;
+  -moz-transition: opacity 0.4s ease-in-out;
+  -o-transition: opacity 0.4s ease-in-out;
+  -webkit-transition: opacity 0.4s ease-in-out;
+  transition: opacity 0.4s ease-in-out;
+}
+.fadein {
+  opacity: 1;
 }
 
