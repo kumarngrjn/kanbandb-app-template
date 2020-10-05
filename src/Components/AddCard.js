@@ -73,17 +73,17 @@ const AddCard = props =>{
       <div className='modal-content'>
         <div className='add-card-wrapper'>
           <label className='add-card-label'>Status:</label>
-          <select data-testid='card-status-select' className='card-status-select' value={status} onChange={e => setStatus(e.target.value)}>
+          <select aria-label="Choose task status" data-testid='card-status-select' className='card-status-select' value={status} onChange={e => setStatus(e.target.value)}>
               {cardStatusOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
           </select>
         </div>
         <div className='add-card-wrapper'>
           <label className='add-card-label'><em className='required'>*</em>Name:</label>
-          <input data-testid={'card-name-input'}  type='text' className={cardNameClasses} placeholder={'Type task name , Eg: Bug: Add new functionality'} value={name} onChange={updateName} onBlur={checkIsNameValid} />
+          <input aria-label="Task Name" data-testid={'card-name-input'}  type='text' className={cardNameClasses} placeholder={'Type task name , Eg: Bug: Add new functionality'} value={name} onChange={updateName} onBlur={checkIsNameValid} />
         </div>
         <div className='add-card-wrapper'>
           <label className='add-card-label'>Descripton:</label>
-          <textarea  data-testid='card-description-textarea'  className='card-description-textarea'rows='5' cols='50' value={description} onChange={e => setDescripton(e.target.value)}></textarea>
+          <textarea aria-label="Task Description" data-testid='card-description-textarea'  className='card-description-textarea'rows='5' cols='50' value={description} onChange={e => setDescripton(e.target.value)}></textarea>
         </div>
       </div>
       <div className='modal-actions'>
