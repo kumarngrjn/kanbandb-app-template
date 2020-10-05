@@ -13,7 +13,8 @@ describe('Card Component', () => {
       id: 'card-1',
       name: 'card name',
       description: 'card description',
-      deleteCard: sinon.stub()
+      deleteCard: sinon.stub(),
+      editCard: sinon.stub()
     }
     const result  = render(<Card {...props} />);
     const {getByTestId} = result;
@@ -25,12 +26,27 @@ describe('Card Component', () => {
     const props = {
       name: 'card name',
       description: 'card description',
-      deleteCard: sinon.stub()
+      deleteCard: sinon.stub(),
+      editCard: sinon.stub()
     }
     const result  = render(<Card {...props} />);
     const {getByTestId} = result;
     fireEvent.click(getByTestId('delete-card-'+props.id));
     expect(props.deleteCard.calledOnce).toBeTruthy;
+  
+  });
+
+  test('calls edit method', () => {
+    const props = {
+      name: 'card name',
+      description: 'card description',
+      deleteCard: sinon.stub(),
+      editCard: sinon.stub()
+    }
+    const result  = render(<Card {...props} />);
+    const {getByTestId} = result;
+    fireEvent.click(getByTestId('edit-card-'+props.id));
+    expect(props.editCard.calledOnce).toBeTruthy;
   
   });
 })

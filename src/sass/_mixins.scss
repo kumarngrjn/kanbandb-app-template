@@ -1,3 +1,6 @@
+@use 'sass:map';
+@use 'variables';
+
 @mixin add-border(
     $position: all,
     $size: 1px,
@@ -20,4 +23,16 @@
 @mixin flex-default {
     display: flex;
     flex-basis: 100%;
+}
+
+@mixin success-message {
+  background-color: map-get($message , 'success');
+  @include add-border(all, 2px, solid, $success-color);
+  color: $success-color;
+}
+
+@mixin error-message {
+  @include add-border(all, 1px, solid, $error-color);
+  background-color: map-get($message , 'error');
+  color: $error-color;
 }

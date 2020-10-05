@@ -110,6 +110,33 @@ describe('App component', () => {
 
     })
 
+    test('call edit task', async () => {
+      sinon.stub(KanbanDB,'getCards').resolves(cards)
+      sinon.stub(KanbanDB, 'updateCardById').resolves(true);
+      sinon.stub(KanbanDB, 'getCardsByStatusCodes').resolves({id: 'card1', name: 'hello', status: 'DONE', description: 'this is a description'});
+      let result;
+      await act(async() => {
+        result = render(<App />)
+      })
+
+      const {getByTestId,queryByTestId} = result;
+      act(() => fireEvent.click(getByTestId('edit-card-card1')));
+      act(() => fireEvent.change(getByTestId('card-status-select'), {target:{value:'DONE'}}));
+      act(() => fireEvent.change(getByTestId('card-name-input'), {target:{value:'hello'}}));
+      act(() => fireEvent.change(getByTestId('card-description-textarea'), {target:{value:'this is test description'}}));
+      act(() => fireEvent.click(getByTestId('add-card')));
+
+      await waitFor(()=> {
+        expect(queryByTestId('message-bar')).toBeTruthy;
+        expect(queryByTestId('message-bar')).toHaveClass('success');
+        //expect(getByTestId('card-title-card1').innerHTML).toEqual('hello');
+        //expect(getByTestId('droppable3-card-1').closest('div')).toHaveClass('done');
+          
+      });
+      expect(getByTestId('card-title-card1').innerHTML).toEqual('hello');
+
+    })
+
     test('call delete  task', async () => {
       sinon.stub(KanbanDB,'getCards').resolves(cards)
       sinon.stub(KanbanDB, 'deleteCardById').resolves(true);

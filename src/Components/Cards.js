@@ -3,11 +3,10 @@ import { Draggable, Droppable } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
 import Card from './Card';
 import '../sass/Cards.scss'
-// import { isEqual } from 'lodash';
-import { getItemStyle, getListStyle } from '../variables';
+import { getItemStyle, getListStyle } from '../helpers/helpers';
 
 const Cards = props => {
-  const {cards, className, title, droppableId, deleteCard} = props;
+  const {cards, className, title, droppableId, deleteCard, editCard} = props;
   return (
               
     <div className={'cards-list-wrapper ' + className}  >
@@ -30,7 +29,7 @@ const Cards = props => {
                             data-testid={droppableId + '-card-'+index}
                             className='card'
                         >
-                            <Card {...card} deleteCard = {() => deleteCard(card.id, card.status)}  />
+                            <Card {...card} deleteCard = {() => deleteCard(card.id, card.status)} editCard = {() => editCard(card)}  />
                         </li>
                     )}
                 </Draggable>

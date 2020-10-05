@@ -19,51 +19,10 @@ export const defaultCards = [
   {
 
     name: 'Write unit tests',
-    description: 'Write unit tests for kanban db template functionality',
+    description: 'Write unit tests for kanban db template functionality.This is long string that will be truncated somewhere around here',
     status: 'TODO'
   },
-  {
-    name: 'Update node modules 2',
-    description: 'Need to update node modules to latest version',
-    status: 'DONE'
-  },
-  {
-    name: 'Start kanban db project 2',
-    description: 'Start working on connecting kanban db template project',
-    status: 'DOING'
-  },
-  {
-
-    name: 'Write unit tests 2',
-    description: 'Write unit tests for kanban db template functionality',
-    status: 'TODO'
-  },
-  {
-    name: 'Update node modules 3',
-    description: 'Need to update node modules to latest version',
-    status: 'DONE'
-  },
-  {
-    name: 'Start kanban db project 3',
-    description: 'Start working on connecting kanban db template project',
-    status: 'DOING'
-  },
-  {
-
-    name: 'Write unit tests 3',
-    description: 'Write unit tests for kanban db template functionality',
-    status: 'TODO'
-  },
-  {
-    name: 'Update node modules 4',
-    description: 'Need to update node modules to latest version',
-    status: 'DONE'
-  },
-  {
-    name: 'Update node modules 5',
-    description: 'Need to update node modules to latest version',
-    status: 'DONE'
-  }
+  
 ]
 
 /**
@@ -112,25 +71,6 @@ export const customStyles = {
   }
 };
 
-const grid = 8;
 
-export const getItemStyle = (isDragging, draggableStyle) => ({
-    // some basic styles to make the items look a bit nicer
-    userSelect: 'none',
-    padding: grid * 2,
-    margin: `0 0 ${grid*2}px 0`,
-
-    // change background colour if dragging
-    background: isDragging ? '#2185d0' : '',
-    color: isDragging ? '#fff' : '',
-
-    // styles we need to apply on draggables
-    ...draggableStyle
-});
-
-export const getListStyle = isDraggingOver => ({
-    background: isDraggingOver ? '#f3f3f3' : '',
-    padding: '10px 20px',
-});
 
 

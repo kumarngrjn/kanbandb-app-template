@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import './sass/normalize.scss';
 import './sass/default.scss';
 import './sass/App.scss'
-import {defaultCards, cardStatusObject,reverseCardStatusMapObject} from './variables'
+import {defaultCards, cardStatusObject,reverseCardStatusMapObject} from './helpers/variables'
 import KanbanDB from 'kanbandb/dist/KanbanDB';
 import Cards from './Components/Cards';
 import AddCard from './Components/AddCard';
 import { DragDropContext} from 'react-beautiful-dnd';
-import { cloneDeep, merge } from 'lodash';
+import { cloneDeep, merge, unionBy } from 'lodash';
 import Message from './Components/Message';
+import Button from './Components/Button';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
   const [showAddTask, setShowAddTask] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const [message, setMessage] = useState({});
+  const [card, setCard] = useState(null);
 
   /**
    * addInitialCards - adds the initial cards to populate the kanban board
@@ -162,6 +164,53 @@ function App() {
     }
 };
 
+const editCard = (card) => {
+  setCard(card);
+  setShowAddTask(true);
+}
+
+/**
+   * addtask - updates the db with the new card details and calls the callback function 
+   * 
+   * @param {string} id : id of the card 
+   * @param {string} name : name of the card 
+   * @param {string} status : name of the card 
+   * @param {string} description : name of the card 
+   * @param {function} callback - callback function after add card is successful
+   */
+  const updateTask = async ({id,name, status, description}, callback) => {
+    try{
+      // calls add card to add the card
+      const updateCard = await KanbanDB.updateCardById(id,{name, status, description});
+      if(updateCard){
+        // sets the message saying card added
+        setMessage({success: true, name: 'Card updated: '+ name});
+        // get card details of the card addeed
+        const updatedCardList = await KanbanDB.getCardsByStatusCodes([status])
+        if(updatedCardList){
+          // call merge to merge the exisiting cards array with the new cards list
+          const mergedCardList = unionBy(updatedCardList,cards, 'id');
+          console.log(mergedCardList);
+          mergedCardList.sort((a,b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
+          // set the updated board
+          setCards(mergedCardList);
+        }
+        callback && callback()
+        setCard(null);
+        setShowMessage(true);
+        setShowAddTask(false);
+      }
+      else {
+        setMessage({success: false, name: 'Edit Task failed. Please try again later.'});
+        setShowMessage(true);
+      }
+    }
+    catch(error){
+      setMessage({success: false, name: 'Edit Task fail: '+ error.message});
+      setShowMessage(true);
+    } 
+  }
+
 /**
  * deleteCard - method called when user deletes a card
  * 
@@ -176,7 +225,6 @@ const deleteCard = async (cardId) => {
     if(deleteCardResponse){
       // get the updated card array
       const updatedList = cards.filter(card => card.id !== cardId)
-      //cards.splice(cardItemIndex,1);
       setCards(updatedList);
 
       setMessage({success: true, name:'Card successfully deleted'});
@@ -203,7 +251,7 @@ const renderCards = () => {
   const renderObject = [];
   for(const key in cardStatusObject){
     const cardsForCurrentStatus = cards.filter(card => card.status === key);
-    renderObject.push(<Cards key={key} cards={cardsForCurrentStatus} title={cardStatusObject[key].title} droppableId ={cardStatusObject[key].droppableId} className={cardStatusObject[key].class} deleteCard={deleteCard}/>);
+    renderObject.push(<Cards key={key} cards={cardsForCurrentStatus} title={cardStatusObject[key].title} droppableId ={cardStatusObject[key].droppableId} className={cardStatusObject[key].class} deleteCard={deleteCard} editCard={editCard}/>);
   } 
   return [...renderObject];
 }
@@ -216,8 +264,8 @@ const renderCards = () => {
         <div className={showMessage ? 'fadein': 'fadeout'}>
           {showMessage && <Message message={message} closeMessage ={resetMessage} />}
         </div>
-        <button data-testid='show-add-task-dialog' id='show-add-task-dialog' className='primary' onClick={()=> setShowAddTask(true)}>Add Task</button>
-        {showAddTask && <AddCard setShowModal={setShowAddTask} addTask ={addTask} />}
+        <Button name={'Add Task'} type='primary' className='show-add-task-dialog' testId={'show-add-task-dialog'} action={()=> setShowAddTask(true)} isTitle={true} />
+        {showAddTask && <AddCard setShowModal={setShowAddTask} addTask ={addTask} updateTask = {updateTask} card={card} />}
         <div className='card-board-wrapper'>
           <DragDropContext onDragEnd={onDragEnd}>
             {renderCards(cards)}

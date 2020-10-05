@@ -26,13 +26,27 @@ ul {
     padding: 0.5rem 2rem;
     cursor: pointer;
     font-size: 1rem;
-    text-transform: uppercase;
     border: 0;
+
+    &.title-button {
+      text-transform: uppercase;
+    }
+
+    &.small {
+      padding: 0.2rem 0.5rem;
+      font-size: 0.8rem;
+    }
     
     &.primary {
         color: #fff;
-        background-color: #2185d0;
+        background-color: $primary;
     }
+
+    &.danger {
+      color: #fff;
+      background-color: $error-color;
+    }
+
   }
 
   

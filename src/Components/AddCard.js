@@ -1,10 +1,11 @@
 import React, {useState } from 'react';
 import PropTypes from 'prop-types';
-import {cardStatusOptions, customStyles} from '../variables';
+import {cardStatusOptions, customStyles} from '../helpers/variables';
 import Modal from 'react-modal';
 import classnames from 'classnames'
 import '../sass/Modal.scss';
 import '../sass/AddCard.scss';
+import Button from './Button';
 
 if (process.env.NODE_ENV !== 'test') {
     Modal.setAppElement('#root')
@@ -12,11 +13,11 @@ if (process.env.NODE_ENV !== 'test') {
 
 const AddCard = props =>{
 
-  const {setShowModal, addTask } = props;
-  const [status, setStatus] = useState(cardStatusOptions[0].value);
-  const [name, setName] = useState('');
+  const {setShowModal, addTask, updateTask, card } = props;
+  const [status, setStatus] = useState(card === null ? cardStatusOptions[0].value: card.status);
+  const [name, setName] = useState(card === null ? '': card.name);
   const [isNameValid, setIsNameValid] = useState(true);
-  const [description, setDescripton] = useState('');
+  const [description, setDescripton] = useState(card === null ?'': card.description);
 
 
   const updateName = event => {
@@ -27,13 +28,26 @@ const AddCard = props =>{
   /**
    * addTask - validates whether name field is not empty and calls the parent task method.
    */
-  const callParentAddTask = () => {
+  const callParentTask = () => {
     //check for name lemgth
     if(name.trim().length > 0){
         setIsNameValid(true)
-        addTask({name, status, description}, () => {
+        if(card === null){
+          addTask({name, status, description}, () => {
+              resetModal();
+          });
+        }
+        else {
+          const updatedCard = {
+            id: card.id,
+            name,
+            status,
+            description
+          }
+          updateTask({...updatedCard}, () => {
             resetModal();
-        });
+          });
+        }
     }
     else {
         setIsNameValid(false)
@@ -68,7 +82,7 @@ const AddCard = props =>{
   return (
     <Modal data-testid={'add-task-modal'} isOpen={true} style={customStyles} contentLabel={'Add Task'}>
       <div className='modal-header'>
-        <h2 data-testid='modal-title'>Add Task</h2>
+        <h2 data-testid='modal-title'>{card === null ? 'Add Task' : 'Edit Task'}</h2>
       </div>
       <div className='modal-content'>
         <div className='add-card-wrapper'>
@@ -87,8 +101,8 @@ const AddCard = props =>{
         </div>
       </div>
       <div className='modal-actions'>
-        <button data-testid='add-card' id='add-card' type='button' className='primary' onClick={callParentAddTask}>Add new</button>
-        <button data-testid='cancel-add-card' id='cancel-add-card' type='button' onClick={closeModal}>Cancel</button>
+        <Button name={card === null ? 'Add new' : 'Update'} type='primary' className='add-card' testId={'add-card'} action={callParentTask} isTitle={true} />
+        <Button name={'Cancel'} className='cancel-add-card' testId={'cancel-add-card'} action={closeModal} isTitle={true} />
       </div>
     </Modal>
   )
