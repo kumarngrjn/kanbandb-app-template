@@ -56,8 +56,8 @@ Cards.propTypes = {
   className: PropTypes.string,
   title: PropTypes.string,
   droppableId: PropTypes.string,
-  deleteCard: PropTypes.func
-
+  deleteCard: PropTypes.func,
+  editCard: PropTypes.func
 }
 
 export default Cards;
