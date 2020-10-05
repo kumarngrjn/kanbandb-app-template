@@ -114,7 +114,9 @@ const AddCard = props =>{
 };
 
 AddCard.propTypes = {
+  card: PropTypes.object,
   addTask: PropTypes.func,
+  updateTask: PropTypes.func,
   setShowModal: PropTypes.func
 }
 
