@@ -1,3 +1,7 @@
+/**
+ * @file App - The frontpage of the application. Displays the Kanban Board along with the add tast button
+ */
+
 import React, { useEffect, useState } from 'react';
 import './sass/normalize.scss';
 import './sass/default.scss';
@@ -188,9 +192,8 @@ const editCard = (card) => {
         // get card details of the card addeed
         const updatedCardList = await KanbanDB.getCardsByStatusCodes([status])
         if(updatedCardList){
-          // call merge to merge the exisiting cards array with the new cards list
+          // call unionBy to merge the exisiting cards array with the new cards list by id
           const mergedCardList = unionBy(updatedCardList,cards, 'id');
-          console.log(mergedCardList);
           mergedCardList.sort((a,b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
           // set the updated board
           setCards(mergedCardList);

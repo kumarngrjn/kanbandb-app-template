@@ -1,5 +1,5 @@
 /**
- * @file Message - Displays message 
+ * @file Message - Displays message at the top of the page
  */
 
 import React from 'react';

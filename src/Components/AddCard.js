@@ -1,3 +1,7 @@
+/**
+ * @file AddCard - Displays Add and Edit Card box to add a new task or update an existing task
+ */
+
 import React, {useState } from 'react';
 import PropTypes from 'prop-types';
 import {cardStatusOptions, customStyles} from '../helpers/variables';

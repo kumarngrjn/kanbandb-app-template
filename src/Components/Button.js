@@ -1,3 +1,7 @@
+/**
+ * @file Button - Displays different types of button styles based on props provided.
+ */
+
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 

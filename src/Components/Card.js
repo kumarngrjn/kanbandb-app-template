@@ -1,4 +1,8 @@
-import React, { Fragment } from 'react';
+/**
+ * @file Card - Displays an actual Kanban card/task with all details passed by props
+ */
+
+ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import '../sass/Card.scss'
 import Button from './Button';

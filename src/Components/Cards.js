@@ -1,3 +1,7 @@
+/**
+ * @file Cards - Displays the different Kanban boards.
+ */
+
 import React from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
