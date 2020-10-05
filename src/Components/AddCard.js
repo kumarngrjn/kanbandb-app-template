@@ -11,6 +11,7 @@ import '../sass/Modal.scss';
 import '../sass/AddCard.scss';
 import Button from './Button';
 
+// set the modal only for prod environment
 if (process.env.NODE_ENV !== 'test') {
     Modal.setAppElement('#root')
 }
